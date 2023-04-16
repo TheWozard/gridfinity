@@ -1,7 +1,10 @@
 gridfinity_scale = [42, 42];
 gridfnity_z_height = 7;
 gridfinity_pad_height = 5;
-grifinity_corner_radius = 8;
+gridfinity_corner_radius = 8;
+
+bottom_corner_radius_ratio = 0.2;
+mid_corner_radius_ratio = 0.4;
 
 // Examples
 // standard_plate([3, 5], 2);
@@ -14,19 +17,19 @@ module standard_block(count) {
 }
 
 module standard_plate(count, z_height) {
-    with_scaleable_pad(count, gridfinity_scale, gridfinity_pad_height, grifinity_corner_radius)
+    with_scaleable_pad(count, gridfinity_scale, gridfinity_pad_height, gridfinity_corner_radius)
     single_box_segment(
         [
-            count.x * gridfinity_scale.x/2 - grifinity_corner_radius/2, 
-            count.y * gridfinity_scale.y/2 - grifinity_corner_radius/2,
+            count.x * gridfinity_scale.x/2 - gridfinity_corner_radius/2, 
+            count.y * gridfinity_scale.y/2 - gridfinity_corner_radius/2,
         ],
         [0, z_height],
-        [grifinity_corner_radius,grifinity_corner_radius]
+        [gridfinity_corner_radius,gridfinity_corner_radius]
     );
 }
 
 module standard_pad() {
-    scaleable_pad(gridfinity_scale, gridfnity_z_height, grifinity_corner_radius);
+    scaleable_pad(gridfinity_scale, gridfnity_z_height, gridfinity_corner_radius);
 }
 
 module standard_grid_layout(count) {
@@ -49,9 +52,9 @@ module with_scaleable_pad(count, scale, pad_height, radius) {
 module scaleable_pad(scale, z_height, radius, extra_height=0, extra_radius=0){
     // a list of tuples of (heigh, corner_radius) that defines breakpoints across a gridfinity pad.
     edge_definition = [
-        [0, 0.2 * radius],
-        [0.16 * z_height, 0.4 * radius],
-        [0.52 * z_height, 0.4 * radius],
+        [0, bottom_corner_radius_ratio * radius],
+        [0.16 * z_height, mid_corner_radius_ratio * radius],
+        [0.52 * z_height, mid_corner_radius_ratio * radius],
         [1 * z_height, radius],
     ];
     
