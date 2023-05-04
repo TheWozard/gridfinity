@@ -77,7 +77,7 @@ module scaleable_pad(size, height, radius, extra_height=0, extra_radius=0){
         // Add new breakpoints before and after if height is extra.
         start_breakpoint = edge_definition_with_extra_radius[0];
         end_breakpoint =  edge_definition_with_extra_radius[len(edge_definition_with_extra_radius)-1];
-        fill() segmented_rounded_box(
+        segmented_rounded_box(
             size_with_extra_radius,
             concat(
                 [[start_breakpoint[0]-extra_height, start_breakpoint[1]]],
@@ -86,7 +86,7 @@ module scaleable_pad(size, height, radius, extra_height=0, extra_radius=0){
             )
         );
     } else {
-        fill() segmented_rounded_box(size_with_extra_radius, edge_definition_with_extra_radius);
+        segmented_rounded_box(size_with_extra_radius, edge_definition_with_extra_radius);
     }
 }
 
