@@ -29,11 +29,30 @@ module standard_block(count) {
     }
 }
 
-module standard_plate(count, height) {
+module with_standard_plate(count, thickness, within_height=0) {
+    intersection() {
+        union() {
+            translate([0,0, gridfinity_pad_height + thickness])
+            intersection() {
+                children();
+                if (within_height > 0) {
+                    translate([0,0, -thickness])rounded_box(
+                        [count.x * gridfinity_scale.x, count.y * gridfinity_scale.y],
+                        within_height + thickness,
+                        [gridfinity_corner_radius, gridfinity_corner_radius]
+                    );
+                }
+            }
+            standard_plate(count, thickness);
+        }
+    }
+}
+
+module standard_plate(count, thickness) {
     with_scaleable_pad(count, gridfinity_scale, gridfinity_pad_height, gridfinity_corner_radius)
     rounded_box(
         [count.x * gridfinity_scale.x, count.y * gridfinity_scale.y],
-        height,
+        thickness,
         [gridfinity_corner_radius, gridfinity_corner_radius]
     );
 }

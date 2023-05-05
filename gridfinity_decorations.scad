@@ -5,7 +5,7 @@ magnet_color = "#023047";
 snap_color = "#219ebc";
 
 // Examples
-with_standard_magnets([1, 2]) standard_plate([1, 2], 2);
+// with_standard_magnets([1, 2]) standard_plate([1, 2], 2);
 // with_standard_snap_fit([1, 2]) standard_plate([1, 2], 2);
 
 // ---Standard Definitions
