@@ -17,15 +17,40 @@ edge_rounding = gridfinity_corner_radius;
 //     translate([0, 0.75 * gridfinity_scale.y, 0]) standard_fits([1, 1.5], 35, base_thickness=0);
 // }
 
-with_push_fit_magnets([1, 2])
-with_standard_plate([1, 2], 2, within_height=100)
-standard_fits([1, 1], 11, base_thickness=0, extra_height=30, round_ratio=1);
+// with_push_fit_magnets([1, 2])
+// with_standard_plate([1, 2], 2, within_height=100)
+// standard_fits([1, 1], 11, base_thickness=0, extra_height=30, round_ratio=1);
 
 
+// Pen Box
+// pencil_box([2,4,3], 0.5, 10.25, base_thickness=0.4);
 
+// Pencil Box
+// pencil_box([2,5,2], 4, 8, base_thickness=0.4, thickness=1.2, box_bonus=1);
+
+// Box
+box([2,4,4]);
+
+// ---Full things
+
+module pencil_box(size, length, spacing, thickness=1.5, base_thickness=0,  bottom_thickness=0.8, lip=1, box_bonus=0) {
+    with_push_fit_magnets(size)
+    from_standard_block(size)
+    render(convexity=3) difference() {
+        standard_box(size + [0,0, box_bonus], thickness,  bottom_thickness=bottom_thickness, lip=lip);
+        translate([0,0, bottom_thickness]) standard_fits([size.x, length], spacing, base_thickness=base_thickness, min_thickness=thickness);
+    }
+}
+
+module box(size, thickness=1.5, base_thickness=0,  bottom_thickness=0.8, lip=1, box_bonus=0) {
+    with_push_fit_magnets(size)
+    from_standard_block(size)
+    render(convexity=3) standard_box(size + [0,0, box_bonus], thickness,  bottom_thickness=bottom_thickness, lip=lip);
+}
 
 // ---Standard Definitions
 // These define standard sized gridfinity modules.
+
 
 module standard_fits(count, d, min_thickness=1, base_thickness=0, round_ratio=1, round_sides=edge_rounding, extra_height=0) {
     width = count.x * gridfinity_scale.x - min_thickness;
@@ -51,8 +76,38 @@ module standard_fins(count, height, spaces, thickness=1, base_thickness=0, round
     );
 }
 
+// standard_box([1,2,2], 1);
+module standard_box(count, thickness, top_edge=0.2, bottom_thickness=0.8, lip=1) {
+    translate([0,0, bottom_thickness]) scaleable_bin(
+        [count.x * gridfinity_scale.x - thickness * 2, count.y * gridfinity_scale.y - thickness * 2, count.z * gridfnity_z_height - gridfinity_pad_height - bottom_thickness - top_edge],
+        gridfinity_corner_radius - thickness,
+        gridfinity_corner_radius * bottom_corner_radius_ratio,
+        lip,
+        bottom_radius = gridfinity_corner_radius * mid_corner_radius_ratio
+    );
+}
+
 // ---Scalable Definition
 // These define entirely custom scalable modules that make use of no globals.
+
+// scaleable_bin([40,40,30], 8, 7, 1, 3);
+module scaleable_bin(size, side_radius, top_radius, top_height, bottom_radius=0, segments=32) {
+    ratio = side_radius/bottom_radius;
+    hull() {
+        translate([0,0,size.z-top_height])
+        cornercopy([size.x, size.y]/2 - [side_radius, side_radius])
+        cylinder(r1=side_radius, r2=top_radius, h=top_height, $fn=segments);
+        if (bottom_radius == 0) {
+            cornercopy([size.x, size.y]/2 - [side_radius, side_radius])
+            cylinder(r=side_radius, h=size.z/2, $fn=segments);
+        } else {
+            translate([0,0,bottom_radius])
+            cornercopy([size.x, size.y]/2 - [side_radius, side_radius])
+            scale([ratio, ratio, 1])
+            sphere(r=bottom_radius, $fn=segments);
+        }
+    }
+}
 
 // Creates a comb like structure
 // scaleable_fins([40, 5, 40], 2, round_sides=20);

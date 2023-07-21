@@ -14,17 +14,24 @@ mid_corner_radius_ratio = 0.4;
 // ---Standard Definitions
 // These define standard sized gridfinity modules.
 
+module from_standard_block(count) {
+    difference() {
+        standard_block(count);
+        translate([0,0, gridfinity_pad_height]) children();
+    }
+}
+
 module standard_block(count) {
     with_scaleable_pad(count, gridfinity_scale, gridfinity_pad_height, gridfinity_corner_radius)
     difference() {
         rounded_box(
             [count.x * gridfinity_scale.x, count.y * gridfinity_scale.y],
-            count.z * gridfnity_z_height,
+            count.z * gridfnity_z_height - 1,
             [gridfinity_corner_radius, gridfinity_corner_radius]
         );
         translate([0,0, count.z * gridfnity_z_height - gridfinity_pad_height]) scaleable_pad(
             [count.x * gridfinity_scale.x, count.y * gridfinity_scale.y],
-            gridfinity_pad_height, gridfinity_corner_radius, extra_height = 1
+            gridfinity_pad_height, gridfinity_corner_radius, extra_height = 1, extra_radius=0.25
         );
     }
 }
