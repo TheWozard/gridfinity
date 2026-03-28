@@ -6,32 +6,52 @@ include <server.scad>
 thickness = 5;
 width = 256;
 
-model = "";
+model = "schitt_switch";
 
 if (model == "plate") {
     plate([width,200,18], thickness, 4);
+} else if (model == "stopper") {
+    stopper(t = thickness);
 } else if (model == "focusrite") {
-    mount([179, 48, 104]);
+    mount([182, 48, 104]);
+} else if (model == "schitt_switch") {
+    switch([20,20,40], o = -75, st = 2) mount([127, 36, 90], o = 20);
 } else if (model == "schitt") {
-    mount([127, 36, 90]);
+    mount([127, 36, 90], o = 20);
 } else if (model == "pcpannel") {
     mount([106, 47, 51]);
 }
 
-module mount(size) {
-    shelf([size.x, size.z, size.y], t = thickness, st = thickness, cr = thickness, wp = 0.75) front_plate([size.x, size.y]);
+module mount(size, o = 0) {
+    shelf([size.x, size.z, size.y], t = thickness, st = thickness, cr = thickness, wp = 0.75, o = o) face_plate([size.x, size.y]);
 }
 
-module front_plate(size) {
+module face_plate(size) {
     front = width - thickness * 2;
     hole_thickness = thickness + 0.02;
-    difference() {
+    rotate([90,0,0]) difference() {
         linear_extrude(thickness)
         difference() {
             rect([front, size.y + thickness * 2], rounding = thickness, $fn = 32);
         }
         translate([front/2 - 10, 0,  - 0.01]) cylinder(d = 5, h = hole_thickness, $fn = 32);
         translate([-front/2 + 10, 0, - 0.01]) cylinder(d = 5, h = hole_thickness, $fn = 32);
+    }
+}
+
+module switch(size, t = thickness, st = thickness, o = 0, eps = 0.01) {
+    outer = size + [st * 2,-eps,-eps];
+    remainder = size.y - t;
+    translate([-o,size.y/2-t,0]) {
+         difference() {
+            union() {
+                translate([0,st/2,0]) cuboid(outer + [0,st,0]);
+                translate([o,-size.y/2+t,0]) children();
+            }
+            cuboid(size);
+            translate([0,-(remainder-size.y)/2,size.z/2-t]) prismoid(size1=[outer.x+eps,0], size2=[outer.x+eps,remainder/2], h=t);
+            translate([0,-(remainder-size.y)/2,-size.z/2]) prismoid(size1=[outer.x+eps,remainder/2], size2=[outer.x+eps,0], h=t);
+        }
     }
 }
 

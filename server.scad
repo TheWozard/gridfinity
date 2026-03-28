@@ -41,7 +41,7 @@ if (model == "stopper") {
 // Defines the front panel of the rack that can be attached.
 module face_plate(u, holes) {
     panel_h = u * u_height;
-    difference() {
+    rotate([90,0,0]) difference() {
         linear_extrude(thickness)
             rect([rack_width, panel_h], rounding = corner_radius, $fn = 32);
         mounting_holes(u, panel_h, holes);
@@ -75,9 +75,9 @@ module mounting_hole() {
                              h = countersink_depth + 0.1);
 }
 
-module shelf(size, t = thickness, st = shelf_thickness, cr = corner_radius, wp = wall_percent, sw = stopper_width, eps = p) {
+module shelf(size, t = thickness, st = shelf_thickness, cr = corner_radius, wp = wall_percent, sw = stopper_width, o = 0, eps = p) {
     shelf_size=[size.x+st*2,size.y-t+st,st];
-    difference() {
+    translate([-o,size.y/2 - thickness,0]) difference() {
         translate([0,t/2+st/2+eps,-eps])
         difference() {
             union() {
@@ -87,7 +87,7 @@ module shelf(size, t = thickness, st = shelf_thickness, cr = corner_radius, wp =
                     translate([0,-shelf_size.y/2+(size.y/4*wp),size.z/2])
                         right_prism([shelf_size.x,size.y*wp,size.z]);
                 }
-                translate([0,-shelf_size.y/2,0]) rotate([90,0,0]) children();
+                translate([o,-shelf_size.y/2,0]) children();
             }
             translate([0,shelf_size.y/2-st/2+eps,-size.z/2-eps]) stopper(w = sw, t = st);
         }

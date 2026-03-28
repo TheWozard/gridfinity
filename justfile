@@ -14,7 +14,7 @@ home_assistant: (_build "home_assistant")
 mirror: (_build "mirror" "frame intersection corners")
 server: (_build "server" "stopper ha_green netgear_gs308 half_u_cover")
 zooz: (_build "zooz")
-mini_rack: (_build "mini_rack" "plate focusrite schitt pcpannel")
+mini_rack: (_build "mini_rack" "plate stopper focusrite schitt schitt_switch pcpannel")
 
 clean:
     find {{output_dir}} -name "*.stl" -delete
