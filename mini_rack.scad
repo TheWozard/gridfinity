@@ -11,11 +11,11 @@ model = "";
 if (model == "plate") {
     plate([width,200,18], thickness, 4);
 } else if (model == "focusrite") {
-    mount([179, 46, 104]);
+    mount([179, 48, 104]);
 } else if (model == "schitt") {
     mount([127, 36, 90]);
 } else if (model == "pcpannel") {
-    mount([106, 53, 51]);
+    mount([106, 47, 51]);
 }
 
 module mount(size) {
