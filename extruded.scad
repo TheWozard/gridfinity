@@ -12,8 +12,8 @@ $fn = 128;
 // l_joint(size, length, spacing, indent);
 // l_top_joint(size, length, spacing, 20/6);
 // translate([0, -length-size, length*2+size]) rotate([90, 0, 180]) scale([-1,1,1]) l_top_joint(size, length, spacing, 4);
-l_slot_joint(size, length, spacing);
-translate([+length+size*2, -length-size/2, 0]) rotate([0, 0, -90]) scale([-1,1,1]) l_slot_joint(size, length, spacing);
+// l_slot_joint(size, length, spacing);
+// translate([+length+size*2, -length-size/2, 0]) rotate([0, 0, -90]) scale([-1,1,1]) l_slot_joint(size, length, spacing);
 
 module l_slot_joint(x, y, s, i) {
     difference() {

@@ -22,6 +22,6 @@ module rounded_box(size, height, corner_radius, segments=24){
 
 // copies children to all 4 possible corner variations of the offset.
 module cornercopy(offset) {
-  for (xx=[-offset.x, offset.x]) for (yy=[-offset.y, offset.y])
-    translate([xx, yy, 0]) children();
+  for (xx=[-1, 1]) for (yy=[-1, 1])
+    scale([xx,yy, 1]) translate([offset.x * xx, offset.y * yy, 0]) children();
 }

@@ -159,6 +159,8 @@ module cornercopy(offset) {
     translate([xx, yy, 0]) children();
 }
 
+
+
 module scaleable_grid_layout(count, scale) {
   translate([-(count.x-1) / 2 * scale.x, -(count.y-1) / 2 * scale.y, 0])
   for (xx=[0:scale.x:(count.x-1) * scale.x]) for (yy=[0:scale.x:(count.y-1) * scale.x])

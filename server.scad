@@ -2,7 +2,7 @@ include <BOSL2/std.scad>
 
 // 10" Server Rack Face Plate Generator
 
-model="ha_green";
+model="";
 
 /* [Thickness] */
 thickness       = 3;
@@ -75,21 +75,21 @@ module mounting_hole() {
                              h = countersink_depth + 0.1);
 }
 
-module shelf(size) {
-    shelf_size=[size.x+shelf_thickness*2,size.y-thickness+shelf_thickness,shelf_thickness];
+module shelf(size, t = thickness, st = shelf_thickness, cr = corner_radius, wp = wall_percent, sw = stopper_width, eps = p) {
+    shelf_size=[size.x+st*2,size.y-t+st,st];
     difference() {
-        translate([0,thickness/2+shelf_thickness/2+p,-p])
+        translate([0,t/2+st/2+eps,-eps])
         difference() {
             union() {
                 translate([0,0,-size.z/2]) {
-                    translate([0,0,-shelf_thickness/2])
-                        cuboid(shelf_size, rounding = corner_radius, edges=[BACK+RIGHT,BACK+LEFT], $fn = 32);
-                    translate([0,-shelf_size.y/2+(size.y/4*wall_percent),size.z/2])
-                        right_prism([shelf_size.x,size.y*wall_percent,size.z]);
+                    translate([0,0,-st/2])
+                        cuboid(shelf_size, rounding = cr, edges=[BACK+RIGHT,BACK+LEFT], $fn = 32);
+                    translate([0,-shelf_size.y/2+(size.y/4*wp),size.z/2])
+                        right_prism([shelf_size.x,size.y*wp,size.z]);
                 }
                 translate([0,-shelf_size.y/2,0]) rotate([90,0,0]) children();
             }
-            translate([0,shelf_size.y/2-shelf_thickness/2+p,-size.z/2-p]) stopper();
+            translate([0,shelf_size.y/2-st/2+eps,-size.z/2-eps]) stopper(w = sw, t = st);
         }
         cube(size, center=true);
     }
