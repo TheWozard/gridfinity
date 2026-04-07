@@ -11,10 +11,15 @@ _build name models="default":
 
 gridfinity_extruded: (_build "gridfinity_extruded")
 home_assistant: (_build "home_assistant")
-mirror: (_build "mirror" "frame intersection corners")
+mirror: (_build "mirror" "frame peg intersection corners")
+mirror_board: (_build "mirror_board" "default")
 server: (_build "server" "stopper ha_green netgear_gs308 half_u_cover")
 zooz: (_build "zooz")
-mini_rack: (_build "mini_rack" "plate stopper focusrite schitt schitt_switch pcpannel")
+mini_rack: (_build "mini_rack" "plate mini_stopper mini_stopper_tall switch plug focusrite schitt_top schitt_bottom pcpannel")
+
+build name model:
+    mkdir -p {{output_dir}}/{{name}}
+    openscad -o {{output_dir}}/{{name}}/{{model}}.stl -D "model=\"{{model}}\"" {{name}}.scad
 
 clean:
     find {{output_dir}} -name "*.stl" -delete

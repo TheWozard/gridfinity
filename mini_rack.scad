@@ -1,25 +1,41 @@
 
 include <BOSL2/std.scad>
-include <2020_profile.scad>
+include <common.scad>
 include <server.scad>
 
 thickness = 5;
 width = 256;
 
-model = "schitt_switch";
+model = "mini_stopper_tall";
+switch_size = [19,16,61];
+schitt_size = [127, 36, 90];
+schitt_size_top = [128.5, 36, 90];
 
 if (model == "plate") {
     plate([width,200,18], thickness, 4);
-} else if (model == "stopper") {
-    stopper(t = thickness);
+} else if (model == "mini_stopper") {
+    stopper(t = thickness, w = stopper_width - 0.2);
+} else if (model == "mini_stopper_tall") {
+    stopper(t = thickness, w = stopper_width - 0.2, h = thickness);
+    translate([0,0,thickness]) cuboid([schitt_size.x,thickness,thickness*2], rounding = thickness, edges=[TOP+RIGHT,TOP+LEFT]);
+    translate([0,thickness/2,thickness/2]) cuboid([schitt_size.x,1,thickness*3], rounding = thickness, edges=[TOP+RIGHT,TOP+LEFT]);
+} else if (model == "switch") {
+    difference() {
+        switch(switch_size, st = 2);
+        cuboid([100, 100, 0.01]);
+    }
+} else if (model == "plug") {
+    plug(15, 13, 35);
 } else if (model == "focusrite") {
     mount([182, 48, 104]);
-} else if (model == "schitt_switch") {
-    switch([20,20,40], o = -75, st = 2) mount([127, 36, 90], o = 20);
-} else if (model == "schitt") {
-    mount([127, 36, 90], o = 20);
+} else if (model == "schitt_top") {
+    within(schitt_size_top)
+    switch(switch_size, o = [-75,0,schitt_size_top.y/2 + thickness], st = 2) mount(schitt_size_top, o = 20);
+} else if (model == "schitt_bottom") {
+    within(schitt_size)
+    switch(switch_size, o = [-75,0,-schitt_size.y/2 - thickness], st = 2) mount(schitt_size, o = 20);
 } else if (model == "pcpannel") {
-    mount([106, 47, 51]);
+    plug(15, 13, 35, o=[70,0,0]) mount([106, 47, 51], o = -30);
 }
 
 module mount(size, o = 0) {
@@ -39,18 +55,25 @@ module face_plate(size) {
     }
 }
 
-module switch(size, t = thickness, st = thickness, o = 0, eps = 0.01) {
-    outer = size + [st * 2,-eps,-eps];
+module within(size) {
+    intersection() {
+        cuboid([width, size.z, size.y] + [thickness, thickness, thickness] * 2 + [0, 1000, 0]);
+        children();
+    }
+}
+
+module switch(size, t = thickness, st = thickness, o = [0,0,0], eps = 0.01) {
+    outer = size + [st * 2,-eps,-eps+st*2];
     remainder = size.y - t;
-    translate([-o,size.y/2-t,0]) {
+    translate(-o + [0,size.y/2-t,0]) {
          difference() {
             union() {
                 translate([0,st/2,0]) cuboid(outer + [0,st,0]);
-                translate([o,-size.y/2+t,0]) children();
+                translate(o + [0,-size.y/2+t,0]) children();
             }
             cuboid(size);
-            translate([0,-(remainder-size.y)/2,size.z/2-t]) prismoid(size1=[outer.x+eps,0], size2=[outer.x+eps,remainder/2], h=t);
-            translate([0,-(remainder-size.y)/2,-size.z/2]) prismoid(size1=[outer.x+eps,remainder/2], size2=[outer.x+eps,0], h=t);
+            translate([0,-(remainder-size.y-st)/2,outer.z/2-st/2]) cuboid([size.x-t + eps * 2,remainder+st,st + eps * 2]);
+            translate([0,-(remainder-size.y-st)/2,-outer.z/2+st/2]) cuboid([size.x-t + eps * 2,remainder+st,st + eps * 2]);
         }
     }
 }
@@ -85,7 +108,20 @@ module teardrop_screw_hole(diameter, depth) {
         teardrop2d(d=diameter, ang=45, $fn=32);
 }
 
-module cornercopy(offset) {
-  for (xx=[-1, 1]) for (yy=[-1, 1])
-    translate([offset.x * xx, offset.y * yy, 0]) scale([xx,yy, 1]) children();
+module plug(od, id, h, o = [0,0,0], t = 2, i = 5, p = 0.01) {
+    tp = od - id;
+    translate(-o + [0,-i,0]) rotate([-90,0,0]) {
+        union() {
+            difference() {
+                union() {
+                    cylinder(d = od + t * 2, h = h + t, $fn = 32);
+                    rotate([90,0,0]) translate(o + [0,i,0]) children();
+                }
+                translate([0,0,-p]) cylinder(d = od, h = h - tp + p, $fn = 32)
+                    attach(TOP, BOTTOM, overlap = p) cylinder(d1 = od, d2 = id, h = tp + p * 2, $fn = 32)
+                        attach(TOP, BOTTOM, overlap = p) cylinder(d = id, h = t + p * 2, $fn = 32);
+            }
+            translate([0,0,h + t]) torus(id = id, od = od + t * 2, $fn = 32);
+        }
+    }
 }

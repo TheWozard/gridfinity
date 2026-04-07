@@ -95,9 +95,9 @@ module shelf(size, t = thickness, st = shelf_thickness, cr = corner_radius, wp =
     }
 }
 
-module stopper(w = stopper_width, t = shelf_thickness) {
+module stopper(w = stopper_width, t = shelf_thickness, h = 0) {
     difference() {
-        cuboid([w,t,t*2], rounding = t, edges=[TOP+RIGHT,TOP+LEFT]);
+        translate([0,0,h/2])cuboid([w,t,t*2 + h], rounding = t, edges=[TOP+RIGHT,TOP+LEFT]);
         translate([-w/2-p,0,-t/2]) rotate([0,90,0]) prismoid(size1=[t+p,t+p], size2=[0,t+p], h=t/2);
         translate([w/2+p,0,-t/2]) rotate([0,-90,0]) prismoid(size1=[t+p,t+p], size2=[0,t+p], h=t/2);
     }

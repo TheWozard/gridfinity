@@ -1,9 +1,10 @@
 include <BOSL2/std.scad>
+include <common.scad>
 
-model = "corners";
+model = "outline";
 
-mirror = [263,428,14];
-screen_top = [267,432, 3.5];
+mirror = [263,430,14];
+screen_top = [269,436, 3.5];
 screen_prism = [258,380, 11 - screen_top.z];
 electronics = [250, 362, 32];
 electronics_left_offset = 3;
@@ -40,6 +41,14 @@ if (model == "frame") {
         frame();
         translate([-bounding.x/2,-bounding.y/2,-extend])
             cuboid([thickness.x*2, thickness.y*2, total_thickness], anchor=BOTTOM);
+    }
+}  else if (model == "outline") {
+    difference() {
+        linear_extrude(0.2) difference() {
+            rect([screen_top.x, screen_top.y]);
+            rect([mirror.x, mirror.y]);
+        }
+        centercopy(mirror) cuboid([20,0.01,0.4]);
     }
 }
 
