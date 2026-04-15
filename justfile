@@ -9,6 +9,7 @@ _build name models="default":
         openscad -o {{output_dir}}/{{name}}/${model}.stl -D "model=\"${model}\"" {{name}}.scad; \
     done
 
+cables: (_build "cables" "wrap_med wrap_large wrap_xlarge")
 gridfinity_extruded: (_build "gridfinity_extruded")
 home_assistant: (_build "home_assistant")
 mirror: (_build "mirror" "frame peg intersection corners")

@@ -3,8 +3,8 @@ include <common.scad>
 
 model = "outline";
 
-mirror = [263,430,14];
-screen_top = [269,436, 3.5];
+mirror = [268,435,14];
+screen_top = [274,441, 3.5];
 screen_prism = [258,380, 11 - screen_top.z];
 electronics = [250, 362, 32];
 electronics_left_offset = 3;
