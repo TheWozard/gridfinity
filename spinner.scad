@@ -10,9 +10,16 @@ inset = arm - (width - bearing)/2;
 
 $fn = 64;
 
-difference() {
-    cuboid([bearing + arm * 2, width, thickness], rounding=rounding, except=[TOP, BOT]);
-    cyl(d = bearing, h = thickness + 0.02);
-    left(inset) cyl(d = bearing, h = thickness + 0.02);
-    right(inset) cyl(d = bearing, h = thickness + 0.02);
+module spinner() {
+    difference() {
+        cuboid([bearing + arm * 2, width, thickness], rounding=rounding, except=[TOP, BOT]);
+        cyl(d = bearing, h = thickness + 0.02);
+        left(inset) cyl(d = bearing, h = thickness + 0.02);
+        right(inset) cyl(d = bearing, h = thickness + 0.02);
+    }
 }
+
+//output:spinner:spinner();
+
+//view
+spinner();

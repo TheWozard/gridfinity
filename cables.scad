@@ -1,17 +1,6 @@
 include <BOSL2/std.scad>
 include <common.scad>
 
-
-model = "wrap_large";
-
-if (model == "wrap_med") {
-    cable_winder([30, 100], 60);
-} else if (model == "wrap_large") {
-    cable_winder([35, 125], 60);
-} else if (model == "wrap_xlarge") {
-    cable_winder([40, 150], 60);
-}
-
 module chamfer_extrude(s, h, c, r, p = 0.01, flip = false) {
     if (flip) {
         linear_extrude(h - c) rect(s, rounding = r);
@@ -44,3 +33,9 @@ module cable_winder(s, l, bt = 4, g = 30, ct = 30, p = 0.01, ch = 2) {
     }
 }
 
+//output:wrap_med:cable_winder([30, 100], 60);
+//output:wrap_large:cable_winder([35, 125], 60);
+//output:wrap_xlarge:cable_winder([40, 150], 60);
+
+//view
+cable_winder([35, 125], 60);

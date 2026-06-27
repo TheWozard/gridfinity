@@ -6,10 +6,6 @@ module box(size=[30,30], height=10, rounding=1, chamfer=1, cut=5, cut_depth=3) {
     diff() prismoid(size1=size, size2=size, rounding=rounding, h=height-chamfer, anchor=TOP) {
         attach(BOT,TOP)
             prismoid(size1=size - ([chamfer, chamfer] * 2), size2=size, rounding1=rounding - chamfer, rounding2=rounding, h=chamfer);
-        // attach([FRONT,BACK],TOP, inside=true)
-        //     prismoid([cut,height+(chamfer * 2)], [cut+(cut_depth*2),height+(chamfer * 2)], h=cut_depth, anchor=BOT);
-        // attach([BOT], TOP, inside=true, overlap=chamfer)
-        //     prismoid([cut,size.y], [cut+(cut_depth*2),size.y], h=cut_depth);
     }
 }
 
@@ -50,9 +46,16 @@ band_size = 3;
 chamfer = 2;
 size = [80,73];
 
-intersect() {
-    difference() {
-        up(band_size) box(size, height=15+chamfer+band_size, rounding=5, chamfer=2, cut=22, cut_depth=0);
-        right(7) inset();
+module lotrcg() {
+    intersect() {
+        difference() {
+            up(band_size) box(size, height=15+chamfer+band_size, rounding=5, chamfer=2, cut=22, cut_depth=0);
+            right(7) inset();
+        }
     }
 }
+
+//output:lotrcg:lotrcg();
+
+//view
+lotrcg();

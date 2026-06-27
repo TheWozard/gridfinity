@@ -1,8 +1,6 @@
 include <BOSL2/std.scad>
 include <common.scad>
 
-model = "outline";
-
 mirror = [267.5,433.5,14];
 screen_top = [273.5,439.5, 3.5];
 screen_prism = [258,380, 11 - screen_top.z];
@@ -13,44 +11,6 @@ border = 10;
 extend = 10;
 total_thickness = mirror.z + screen_top.z + screen_prism.z + extend;
 bounding = [screen_top.x + border * 2, screen_top.y + border * 2];
-
-if (model == "frame") {
-    frame();
-} else if (model == "body") {
-    body();
-} else if (model == "intersection") {
-    thickness = 0.2;
-    intersection() {
-        frame();
-        translate([0,0,-extend])
-            cuboid([bounding.x, thickness, total_thickness], anchor=BOTTOM);
-    }
-    intersection() {
-        frame();
-        translate([0,bounding.y/2,-extend])
-            cuboid([thickness, bounding.y/2, total_thickness], anchor=BOTTOM);
-    }
-}  else if (model == "corners") {
-    thickness = [30,50];
-    intersection() {
-        frame();
-        translate([bounding.x/2,bounding.y/2,-extend])
-            cuboid([thickness.x*2, thickness.y*2, total_thickness], anchor=BOTTOM);
-    }
-    intersection() {
-        frame();
-        translate([-bounding.x/2,-bounding.y/2,-extend])
-            cuboid([thickness.x*2, thickness.y*2, total_thickness], anchor=BOTTOM);
-    }
-}  else if (model == "outline") {
-    difference() {
-        linear_extrude(screen_top.z) difference() {
-            rect([screen_top.x, screen_top.y]);
-            rect([mirror.x, mirror.y]);
-        }
-        centercopy(mirror) cuboid([20,0.01,screen_top.z * 2]);
-    }
-}
 
 module frame() {
     difference() {
@@ -68,7 +28,6 @@ module body() {
                 attach(TOP, BOTTOM, overlap=0.01)
                     cuboid(screen_top)
                         attach(TOP, BOTTOM, overlap=0.01) {
-                            // With the mirror being an overhang we have to ease into it.
                             dif = max([screen_top.x - mirror.x, screen_top.y - mirror.y]);
                             start = [screen_top.x, screen_top.y];
                             end = [mirror.x, mirror.y];
@@ -77,3 +36,50 @@ module body() {
                                     cuboid(mirror - [0,0,dif] + [0,0,1]);
                         }
 }
+
+module mirror_section() {
+    thickness = 0.2;
+    intersection() {
+        frame();
+        translate([0,0,-extend])
+            cuboid([bounding.x, thickness, total_thickness], anchor=BOTTOM);
+    }
+    intersection() {
+        frame();
+        translate([0,bounding.y/2,-extend])
+            cuboid([thickness, bounding.y/2, total_thickness], anchor=BOTTOM);
+    }
+}
+
+module mirror_corners() {
+    thickness = [30,50];
+    intersection() {
+        frame();
+        translate([bounding.x/2,bounding.y/2,-extend])
+            cuboid([thickness.x*2, thickness.y*2, total_thickness], anchor=BOTTOM);
+    }
+    intersection() {
+        frame();
+        translate([-bounding.x/2,-bounding.y/2,-extend])
+            cuboid([thickness.x*2, thickness.y*2, total_thickness], anchor=BOTTOM);
+    }
+}
+
+module mirror_outline() {
+    difference() {
+        linear_extrude(screen_top.z) difference() {
+            rect([screen_top.x, screen_top.y]);
+            rect([mirror.x, mirror.y]);
+        }
+        centercopy(mirror) cuboid([20,0.01,screen_top.z * 2]);
+    }
+}
+
+//output:frame:frame();
+//output:body:body();
+//output:mirror_section:mirror_section();
+//output:mirror_corners:mirror_corners();
+//output:mirror_outline:mirror_outline();
+
+//view
+frame();

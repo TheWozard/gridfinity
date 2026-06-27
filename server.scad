@@ -2,8 +2,6 @@ include <BOSL2/std.scad>
 
 // 10" Server Rack Face Plate Generator
 
-model="";
-
 /* [Thickness] */
 thickness       = 3;
 corner_radius   = 5;
@@ -27,18 +25,6 @@ u_height        = 44.45;
 /* [Rendering] */
 p = 0.01;
 
-if (model == "stopper") {
-    stopper();
-} else if (model == "ha_green") {
-    shelf([112, 112, 34]) face_plate(1, [5.725, 38.725]);
-} else if (model == "netgear_gs308") {
-    shelf([159, 102, 28]) face_plate(1, [5.725, 38.725]);
-} else if (model == "half_u_cover") {
-    face_plate(0.5, [5.725]);
-}
-
-
-// Defines the front panel of the rack that can be attached.
 module face_plate(u, holes) {
     panel_h = u * u_height;
     rotate([90,0,0]) difference() {
@@ -48,7 +34,6 @@ module face_plate(u, holes) {
     }
 }
 
-// Defines the layout of how holes align to the plate.
 module mounting_holes(u, panel_h, holes) {
     xflip_copy()
         for (ui = [0 : ceil(u) - 1])
@@ -63,7 +48,6 @@ module mounting_holes(u, panel_h, holes) {
             }
 }
 
-// Defines the mounting holes. Enables elongation and counter sinking.
 module mounting_hole() {
     linear_extrude(thickness + 0.2)
         rect([hole_elongation + hole_diameter, hole_diameter], rounding = hole_diameter / 2, $fn = 16);
@@ -112,3 +96,11 @@ module right_prism(size) {
         anchor = CENTER
     );
 }
+
+//output:stopper:stopper();
+//output:ha_green:shelf([112, 112, 34]) face_plate(1, [5.725, 38.725]);
+//output:netgear_gs308:shelf([159, 102, 28]) face_plate(1, [5.725, 38.725]);
+//output:half_u_cover:face_plate(0.5, [5.725]);
+
+//view
+stopper();

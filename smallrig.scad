@@ -9,15 +9,22 @@ corner_r = 2;
 
 $fn = 128;
 
-difference() {
-    linear_extrude(height = thickness)
-        offset(r = corner_r, $fn = 64)
-        offset(r = -corner_r)
-        polygon([
-            [0,          outer_d/2],
-            [inner_d/2,  0        ],
-            [0,         -outer_d/2],
-            [-inner_d/2, 0        ],
-        ]);
-    translate([0,0,-0.01]) cylinder(h = thickness + 0.02, d = insert_camera);
+module smallrig_mount() {
+    difference() {
+        linear_extrude(height = thickness)
+            offset(r = corner_r, $fn = 64)
+            offset(r = -corner_r)
+            polygon([
+                [0,          outer_d/2],
+                [inner_d/2,  0        ],
+                [0,         -outer_d/2],
+                [-inner_d/2, 0        ],
+            ]);
+        translate([0,0,-0.01]) cylinder(h = thickness + 0.02, d = insert_camera);
+    }
 }
+
+//output:smallrig_mount:smallrig_mount();
+
+//view
+smallrig_mount();

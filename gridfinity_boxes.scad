@@ -28,7 +28,9 @@ edge_rounding = gridfinity_corner_radius;
 // Pencil Box
 // pencil_box([2,5,2], 4, 8, base_thickness=0.4, thickness=1.2, box_bonus=1);
 
-// Box
+//output:box:box([2,4,4]);
+
+//view
 box([2,4,4]);
 
 // ---Full things

@@ -2,16 +2,16 @@ include <BOSL2/std.scad>
 include <BOSL2/gears.scad>
 include <common.scad>
 
-module turner_vhs_spindle(h = 20, outer_d = 17, inner_d = 13, teeth = 5) {
+module turner_vhs_spindle(h = 20, outer_d = 17, inner_d = 13, teeth = 9) {
     linear_extrude(h)
         star(n = teeth, r = outer_d / 2, ir = inner_d / 2);
 }
 
-module turner_vhs(l = 50, h = 20) {
+module turner_vhs(l = 50, h = 20, d = 7.9) {
     union() {
-        turner_vhs_spindle(h = h);
+        turner_vhs_spindle(h = h, inner_d = d);
         $fn = 32;
-        cylinder(h = l, d = 7.9);
+        cylinder(h = l, d = d);
     }
 }
 

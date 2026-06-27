@@ -8,7 +8,14 @@ thickness = 8.0;
 
 $fn = 128;
 
-difference() {
-    cylinder(h = thickness, d1 = outer_d, d2 = outer_d - thickness * 2);
-    translate([0,0,-0.01]) cylinder(h = thickness + 0.02, d = insert_camera);
+module tv_mount() {
+    difference() {
+        cylinder(h = thickness, d1 = outer_d, d2 = outer_d - thickness * 2);
+        translate([0,0,-0.01]) cylinder(h = thickness + 0.02, d = insert_camera);
+    }
 }
+
+//output:tv_mount:tv_mount();
+
+//view
+tv_mount();

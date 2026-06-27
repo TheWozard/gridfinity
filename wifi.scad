@@ -10,15 +10,22 @@ $fn           = 64;
 
 qr_size = coaster_size - border * 2;
 
-union() {
-    cuboid([coaster_size, coaster_size, coaster_thick],
-           rounding = corner_r,
-           edges = [FRONT+LEFT, FRONT+RIGHT, BACK+LEFT, BACK+RIGHT],
-           anchor = BOT);
+module wifi_coaster() {
+    union() {
+        cuboid([coaster_size, coaster_size, coaster_thick],
+               rounding = corner_r,
+               edges = [FRONT+LEFT, FRONT+RIGHT, BACK+LEFT, BACK+RIGHT],
+               anchor = BOT);
 
-    up(coaster_thick - 0.01)
-        linear_extrude(height = qr_thick + 0.01)
-            offset(r=0.001) offset(r=-0.001)
-                resize([qr_size, qr_size])
-                    import("wifi.svg", center = true);
+        up(coaster_thick - 0.01)
+            linear_extrude(height = qr_thick + 0.01)
+                offset(r=0.001) offset(r=-0.001)
+                    resize([qr_size, qr_size])
+                        import("wifi.svg", center = true);
+    }
 }
+
+//output:wifi_coaster:wifi_coaster();
+
+//view
+wifi_coaster();

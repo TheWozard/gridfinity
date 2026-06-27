@@ -4,8 +4,6 @@ desk_bump_depth = 3;
 desk_bump_width = 10;
 desk_bump_distance_to_edge = 14;
 
-desk_mount(30, 1, 1);
-
 // models a clip for the edge of my standing desk
 module desk_mount(l, d, t) {
     difference() {
@@ -41,3 +39,8 @@ module rounded_cap(h, w, t, e=1) {
         translate([-c-e,-w/2,-t/2]) cube([h+e, w, t]);
     }
 }
+
+//output:desk_mount:desk_mount(30, 1, 1);
+
+//view
+desk_mount(30, 1, 1);

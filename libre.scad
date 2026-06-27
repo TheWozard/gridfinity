@@ -42,7 +42,8 @@ module dome_cover() {
     }
 }
 
-dome_cover();
+//output:dome_cover:dome_cover();
 
-// reference cylinder — shown as transparent ghost, not part of the model
+//view
+dome_cover();
 %cyl(d = diameter, h = height, anchor = BOTTOM);

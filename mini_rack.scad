@@ -6,36 +6,21 @@ include <server.scad>
 thickness = 5;
 width = 256;
 
-model = "mini_stopper_tall";
 switch_size = [19,16,61];
 schitt_size = [127, 36, 90];
 schitt_size_top = [128.5, 36, 90];
 
-if (model == "plate") {
-    plate([width,200,18], thickness, 4);
-} else if (model == "mini_stopper") {
-    stopper(t = thickness, w = stopper_width - 0.2);
-} else if (model == "mini_stopper_tall") {
+module mini_stopper_tall() {
     stopper(t = thickness, w = stopper_width - 0.2, h = thickness);
     translate([0,0,thickness]) cuboid([schitt_size.x,thickness,thickness*2], rounding = thickness, edges=[TOP+RIGHT,TOP+LEFT]);
     translate([0,thickness/2,thickness/2]) cuboid([schitt_size.x,1,thickness*3], rounding = thickness, edges=[TOP+RIGHT,TOP+LEFT]);
-} else if (model == "switch") {
+}
+
+module switch_tray() {
     difference() {
         switch(switch_size, st = 2);
         cuboid([100, 100, 0.01]);
     }
-} else if (model == "plug") {
-    plug(15, 13, 35);
-} else if (model == "focusrite") {
-    mount([182, 48, 104]);
-} else if (model == "schitt_top") {
-    within(schitt_size_top)
-    switch(switch_size, o = [-75,0,schitt_size_top.y/2 + thickness], st = 2) mount(schitt_size_top, o = 20);
-} else if (model == "schitt_bottom") {
-    within(schitt_size)
-    switch(switch_size, o = [-75,0,-schitt_size.y/2 - thickness], st = 2) mount(schitt_size, o = 20);
-} else if (model == "pcpannel") {
-    plug(15, 13, 35, o=[70,0,0]) mount([106, 47, 51], o = -30);
 }
 
 module mount(size, o = 0) {
@@ -77,7 +62,6 @@ module switch(size, t = thickness, st = thickness, o = [0,0,0], eps = 0.01) {
         }
     }
 }
-
 
 module plate(size, inset, thickness) {
     corners = [size.x/2 - inset - 10, size.y/2 - inset - 10];
@@ -125,3 +109,16 @@ module plug(od, id, h, o = [0,0,0], t = 2, i = 5, p = 0.01) {
         }
     }
 }
+
+//output:plate:plate([width,200,18], thickness, 4);
+//output:mini_stopper:stopper(t = thickness, w = stopper_width - 0.2);
+//output:mini_stopper_tall:mini_stopper_tall();
+//output:switch_tray:switch_tray();
+//output:plug:plug(15, 13, 35);
+//output:focusrite:mount([182, 48, 104]);
+//output:schitt_top:within(schitt_size_top) switch(switch_size, o = [-75,0,schitt_size_top.y/2 + thickness], st = 2) mount(schitt_size_top, o = 20);
+//output:schitt_bottom:within(schitt_size) switch(switch_size, o = [-75,0,-schitt_size.y/2 - thickness], st = 2) mount(schitt_size, o = 20);
+//output:pcpannel:plug(15, 13, 35, o=[70,0,0]) mount([106, 47, 51], o = -30);
+
+//view
+mini_stopper_tall();
