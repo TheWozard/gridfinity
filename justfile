@@ -6,17 +6,21 @@ default:
 _build name models="default":
     mkdir -p {{output_dir}}/{{name}}
     for model in {{models}}; do \
-        openscad -o {{output_dir}}/{{name}}/${model}.stl -D "model=\"${model}\"" {{name}}.scad; \
+        openscad -o {{output_dir}}/{{name}}/${model}.stl -D "model=\"{{name}}_${model}\"" {{name}}.scad; \
     done
 
 cables: (_build "cables" "wrap_med wrap_large wrap_xlarge")
 gridfinity_extruded: (_build "gridfinity_extruded")
 home_assistant: (_build "home_assistant")
+lens: (_build "lens" "filter cap top")
 mirror: (_build "mirror" "frame peg intersection corners")
 mirror_board: (_build "mirror_board" "default")
 server: (_build "server" "stopper ha_green netgear_gs308 half_u_cover")
 zooz: (_build "zooz")
+wifi: (_build "wifi")
 mini_rack: (_build "mini_rack" "plate mini_stopper mini_stopper_tall switch plug focusrite schitt_top schitt_bottom pcpannel")
+tv: (_build "tv" "default")
+smallrig: (_build "smallrig" "default")
 
 build name model:
     mkdir -p {{output_dir}}/{{name}}

@@ -3,8 +3,8 @@ include <common.scad>
 
 model = "outline";
 
-mirror = [268,435,14];
-screen_top = [274,441, 3.5];
+mirror = [267.5,433.5,14];
+screen_top = [273.5,439.5, 3.5];
 screen_prism = [258,380, 11 - screen_top.z];
 electronics = [250, 362, 32];
 electronics_left_offset = 3;
@@ -44,11 +44,11 @@ if (model == "frame") {
     }
 }  else if (model == "outline") {
     difference() {
-        linear_extrude(0.2) difference() {
+        linear_extrude(screen_top.z) difference() {
             rect([screen_top.x, screen_top.y]);
             rect([mirror.x, mirror.y]);
         }
-        centercopy(mirror) cuboid([20,0.01,0.4]);
+        centercopy(mirror) cuboid([20,0.01,screen_top.z * 2]);
     }
 }
 
