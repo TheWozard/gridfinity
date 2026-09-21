@@ -104,4 +104,4 @@ module right_prism(size) {
 //output:half_u_cover:face_plate(0.5, [5.725]);
 
 //view
-shelf([88, 60, 28]) face_plate(1, [5.725, 38.725]);
+// shelf([88, 60, 28]) face_plate(1, [5.725, 38.725]);

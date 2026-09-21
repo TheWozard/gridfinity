@@ -23,17 +23,18 @@ module switch_tray() {
     }
 }
 
-module mount(size, o = 0) {
-    shelf([size.x, size.z, size.y], t = thickness, st = thickness, cr = thickness, wp = 0.75, o = o) face_plate([size.x, size.y]);
+module mount(size, o = 0, fh = undef, wp=0.75) {
+    shelf([size.x, size.z, size.y], t = thickness, st = thickness, cr = thickness, wp = wp, o = o) face_plate([size.x, size.y], h = fh);
 }
 
-module face_plate(size) {
+module face_plate(size, h = undef) {
     front = width - thickness * 2;
+    height = is_undef(h) ? size.y + thickness * 2 : h;
     hole_thickness = thickness + 0.02;
     rotate([90,0,0]) difference() {
         linear_extrude(thickness)
         difference() {
-            rect([front, size.y + thickness * 2], rounding = thickness, $fn = 32);
+            rect([front, height], rounding = thickness, $fn = 32);
         }
         translate([front/2 - 10, 0,  - 0.01]) cylinder(d = 5, h = hole_thickness, $fn = 32);
         translate([-front/2 + 10, 0, - 0.01]) cylinder(d = 5, h = hole_thickness, $fn = 32);
@@ -92,6 +93,14 @@ module teardrop_screw_hole(diameter, depth) {
         teardrop2d(d=diameter, ang=45, $fn=32);
 }
 
+module pill(size, o = [0,0,0], t = thickness, p = 0.1) {
+    difference() {
+        children();
+        translate(o + [0,p,0]) rotate([90,0,0]) linear_extrude(t + p * 2)
+            rect(size, rounding = min(size.x, size.y) / 2, $fn = 32);
+    }
+}
+
 module plug(od, id, h, o = [0,0,0], t = 2, i = 5, p = 0.01) {
     tp = od - id;
     translate(-o + [0,-i,0]) rotate([-90,0,0]) {
@@ -119,6 +128,7 @@ module plug(od, id, h, o = [0,0,0], t = 2, i = 5, p = 0.01) {
 //output:schitt_top:within(schitt_size_top) switch(switch_size, o = [-75,0,schitt_size_top.y/2 + thickness], st = 2) mount(schitt_size_top, o = 20);
 //output:schitt_bottom:within(schitt_size) switch(switch_size, o = [-75,0,-schitt_size.y/2 - thickness], st = 2) mount(schitt_size, o = 20);
 //output:pcpannel:plug(15, 13, 35, o=[70,0,0]) mount([106, 47, 51], o = -30);
+//output:usb_hub:pill([60, 10.5], o = [-60,0,0]) mount([106, 10.5, 31], o = -40, fh = 21, wp=0.25);
 
 //view
-mount([182, 48, 104]);
+pill([60, 10.5], o = [-60,0,0]) mount([106, 10.5, 31], o = -40, fh = 21, wp=0.25);
