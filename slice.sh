@@ -14,20 +14,33 @@ OUT="${2:-output}/$BASENAME"
 
 mkdir -p "$OUT"
 rm -f "$OUT"/*.stl
-trap 'rm -f "$OUT/.stripped.scad" "$OUT/.render.scad"' EXIT
 
-sed '/^\/\/view/,$d' "$SCAD_FILE" | \
-    sed "s|include <\([^/>]*\.scad\)>|include <$SCAD_DIR/\1>|g" > "$OUT/.stripped.scad"
+BUILD="$(mktemp -d)"
+trap 'rm -rf "$BUILD"' EXIT
+
+# Copy a local .scad into the build dir without its //view section, then do the
+# same for everything it includes -- an included file's view geometry would
+# otherwise be welded into every part rendered from this file.
+strip_views() {
+    local src="$1" dst="$2" inc
+    sed '/^\/\/view/,$d' "$src" > "$dst"
+    while IFS= read -r inc; do
+        [[ -f "$SCAD_DIR/$inc" && ! -f "$BUILD/$inc" ]] || continue
+        strip_views "$SCAD_DIR/$inc" "$BUILD/$inc"
+    done < <(sed -n 's|^include <\([^/>]*\.scad\)>.*|\1|p' "$dst")
+}
+
+strip_views "$SCAD_FILE" "$BUILD/.stripped.scad"
 
 if ! grep -q '//output:' "$SCAD_FILE"; then
     echo "Rendering $SCAD_FILE -> $OUT/$BASENAME.stl ..."
-    openscad -o "$OUT/$BASENAME.stl" "$OUT/.stripped.scad"
+    openscad -o "$OUT/$BASENAME.stl" "$BUILD/.stripped.scad"
 else
     while IFS= read -r tag; do
         name="${tag%%:*}"
         call="${tag#*:}"
-        printf 'include <.stripped.scad>\n%s\n' "$call" > "$OUT/.render.scad"
+        printf 'include <.stripped.scad>\n%s\n' "$call" > "$BUILD/.render.scad"
         echo "Rendering $call -> $OUT/$name.stl ..."
-        openscad -o "$OUT/$name.stl" "$OUT/.render.scad"
+        openscad -o "$OUT/$name.stl" "$BUILD/.render.scad"
     done < <(sed -n 's|.*//output:||p' "$SCAD_FILE")
 fi

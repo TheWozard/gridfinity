@@ -99,8 +99,9 @@ module right_prism(size) {
 
 //output:stopper:stopper();
 //output:ha_green:shelf([112, 112, 34]) face_plate(1, [5.725, 38.725]);
+//output:usb_hub:shelf([88, 40, 28]) face_plate(1, [5.725, 38.725]);
 //output:netgear_gs308:shelf([159, 102, 28]) face_plate(1, [5.725, 38.725]);
 //output:half_u_cover:face_plate(0.5, [5.725]);
 
 //view
-stopper();
+shelf([88, 60, 28]) face_plate(1, [5.725, 38.725]);

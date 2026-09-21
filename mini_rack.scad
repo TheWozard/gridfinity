@@ -121,4 +121,4 @@ module plug(od, id, h, o = [0,0,0], t = 2, i = 5, p = 0.01) {
 //output:pcpannel:plug(15, 13, 35, o=[70,0,0]) mount([106, 47, 51], o = -30);
 
 //view
-mini_stopper_tall();
+mount([182, 48, 104]);
